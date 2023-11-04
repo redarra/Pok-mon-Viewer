@@ -10,6 +10,10 @@ import Controller.Pokemon_Viewer.PokemonController;
 import Model.Pokemon_Viewer.Pokemon;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 	public class GUIHome {
@@ -32,9 +36,16 @@ import java.net.URL;
             };
             JTable table = new JTable();
             table.setModel(model);
-	        JFrame frame = new JFrame("Chat Frame");
-            frame.add(new JScrollPane(table));
-	        Pokemon student = controller.getPokeList().get(1);
+            
+            int rows = 10;
+            int cols = 4;
+            int cellWidth = 15;
+            PokemonGrid mainPanel = new PokemonGrid(rows, cols, cellWidth,controller);
+            
+	        JFrame frame = new JFrame("Pokedex");
+
+            //frame.add();
+	        //Pokemon student = controller.getPokeList().get(1);
 
             //try {
               // URL url = new URL( student.imageUrl);
@@ -48,7 +59,7 @@ import java.net.URL;
 
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true); 
-	        frame.setSize(800, 800);
+	        frame.setSize(1000, 800);
 
 	        //Creating the MenuBar and adding components
 	        JMenuBar mb = new JMenuBar();
@@ -64,13 +75,13 @@ import java.net.URL;
 	        //Creating the panel at bottom and adding components
 	        JPanel panel = new JPanel(); // the panel is not visible in output
 	        JLabel label = new JLabel("Enter Text");
-	        JTextField tf = new JTextField(10); // accepts upto 10 characters
-	        JButton send = new JButton("Send");
-	        JButton reset = new JButton("Reset");
+	       // JTextField tf = new JTextField(10); // accepts upto 10 characters
+	        JButton previous = new JButton("Previous");
+	        JButton next = new JButton("Next");
 	        panel.add(label); // Components Added using Flow Layout
-	        panel.add(tf);
-	        panel.add(send);
-	        panel.add(reset);
+	       // panel.add(tf);
+	        panel.add(previous);
+	        panel.add(next);
 
 	        // Text Area at the Center
 	        JTextArea ta = new JTextArea();
@@ -78,13 +89,12 @@ import java.net.URL;
 	        //Adding Components to the frame.
 	        frame.getContentPane().add(BorderLayout.SOUTH, panel);
 	        frame.getContentPane().add(BorderLayout.NORTH, mb);
-	        frame.getContentPane().add(BorderLayout.CENTER, ta);
+	        frame.getContentPane().add(BorderLayout.CENTER, new JScrollPane(mainPanel));//new JScrollPane(table));
 	        frame.setVisible(true);
 	        
 	
 
 	        
 	    
-	}
+	}}
 
-}

@@ -47,12 +47,13 @@ import Model.Pokemon_Viewer.Pokemon;
         Pokemon student = controller.getPokeList().get(rowIndex);
         switch (columnIndex) {
         case 0:
-             try {
-                URL url = new URL( student.imageUrl);
-                BufferedImage img = ImageIO.read(url);
-                return new JLabel(new ImageIcon(img));
-            } catch (IOException e) {
-            }
+           //  try {
+          //      URL url = new URL( student.imageUrl);
+          //      BufferedImage img = ImageIO.read(url);
+          //      return new JLabel(new ImageIcon(img));
+          //  } catch (IOException e) {
+          //  }
+        	return student.name;
         case 1:
             return student.name;
         default:

@@ -27,18 +27,23 @@ public class ClientApp {
            JsonToObjList(getMethod("https://pokeapi.co/api/v2/pokemon?offset="+index+"&limit="+total),total);
            
     }
+    public PokemonDetails getPokemon(Pokemon poke) throws IOException, InterruptedException {
+    	return JsonToObjPokeList(poke,getMethod(poke.url));
+    	
+    }
 
-    public  JsonObject getMethod(String url) throws IOException, InterruptedException {
+    public  String getMethod(String url) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
          JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
-         return jsonObject;
+         //String jsonString = ;
+         return jsonObject.toString();
     }
-    public  void JsonToObjList(JsonObject jsonObject, int total) {
-        String jsonString = jsonObject.toString();
+    public  void JsonToObjList(String jsonString, int total) {
+        //String jsonString = jsonObject.toString();
         String ar =jsonString.split("results"+'"'+":")[1].replace("[","").replaceAll("\"","").replaceAll(":", ",").replaceAll("\\{","").replaceAll("\\}", "").replaceAll("\\]", "");
         System.out.println(ar);
         String[] pokes= ar.split(",");
@@ -46,6 +51,53 @@ public class ClientApp {
        	 pokeList.add(new Pokemon(pokeList.size()+1,pokes[i*5+1],pokes[i*5+3]+":"+pokes[i*5+4],"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+(pokeList.size()+1)+".png"));
        	 
         }
+    }
+        public  PokemonDetails JsonToObjPokeList(Pokemon poke,String jsonString) {             
+             PokemonDetails pokeDet = new PokemonDetails(poke.id,poke.name,poke.url,poke.imageUrl);
+    System.out.println(jsonString);
+    //ability
+    
+
+    String[] list=jsonString.split("\""+"ability"+"\"");
+    for (int i=1;i<list.length;i++) {
+    	String test=list[i].split("\""+"name"+"\""+":")[1].replaceAll("\"","").split(",")[0];
+    	System.out.println(test);
+    	pokeDet.addAbility(test);
+    }
+
+    
+
+    //System.out.println(list[2]);
+    //base_experience
+    list=list[list.length-1].replaceAll("\"","").split("base_experience:");
+    String baseXP=list[1].split(",")[0];
+    pokeDet.setbaseXP(baseXP);
+    System.out.println(list[0]);
+    System.out.println(list.length);
+    System.out.println(baseXP);
+    list=list[1].split("height:");
+    String height =list[1].split(",")[0];
+    pokeDet.setHeight(height);
+    list= list[1].split("base_stat:");
+    System.out.println(list.length);
+    String Stat =list[1].split(",")[0];
+
+
+    for (int i=1;i<list.length;i++) {
+    	String base_stat=list[i].split(",")[0];
+    	String effort =list[i].split("effort:")[1].split(",")[0];
+    	String name =list[i].split("name:")[1].split(",")[0];
+    	System.out.println(base_stat);
+    	System.out.println(effort);
+    	System.out.println(name);
+    	pokeDet.addStat( name,  base_stat,  effort);
+    	
+
+    }
+    String weight =list[list.length-1].split("weight:")[1].split(",")[0];
+    pokeDet.setWeight(weight);
+    return pokeDet ;
+            
     }
    // public static String getAbilities
 ///    https://pokeapi.co/api/v2/ability/
