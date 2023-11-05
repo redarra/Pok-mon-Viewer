@@ -33,7 +33,10 @@ public class App
 		  
    	 
         PokemonController controller = new PokemonController(clApp);
+
         controller.loadList();
+		
+
         GUIHome guiHome = new GUIHome( controller);
 		guiHome.home();
     }

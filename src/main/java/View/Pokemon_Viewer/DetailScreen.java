@@ -1,6 +1,7 @@
 package View.Pokemon_Viewer;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import Controller.Pokemon_Viewer.PokemonController;
 import Model.Pokemon_Viewer.Pokemon;
@@ -37,70 +39,87 @@ public class DetailScreen {
 
         //Creating the Frame
 
-    
-    	pokeDe=controller.getPokemon(poke);
-        CustomModel model = new CustomModel(controller) {
-            @Override
-            public Class<?> getColumnClass(int column) {
-                if (column==2) return ImageIcon.class;
-                return Object.class;
-            }
-        };
-        JTable table = new JTable();
-        table.setModel(model);
-        JFrame frame = new JFrame("Chat Frame");
-        JPanel panel1 = new JPanel(new GridLayout(10, 4,10, 15));
-        
-
 
 
         try {
+            
+        	pokeDe=controller.getPokemon2(poke);
+        	JPanel pan = new JPanel();
+        	pan.setLayout(new GridLayout(1,3));
+        	JPanel pan1=new JPanel();
+        	JPanel pan2 = new JPanel();
+        	
+            
+            JFrame frame = new JFrame("Pokemon Details");
+            JPanel panel1 = new JPanel(new GridLayout(5, 1));
+            
+
+
            URL url = new URL( pokeDe.imageUrl);
            Image img = ImageIO.read(url);
            
-           JLabel label2 =new JLabel(new ImageIcon(img));
-           JLabel label1 =new JLabel(pokeDe.name);
-           JPanel panel11 = new JPanel();
-           panel11.add(label1);
-           panel11.add(label2);
-
-    
+           JLabel pic =new JLabel(new ImageIcon(img));
+       
+        JLabel name =new JLabel(pokeDe.name);
+        
+        
+       	JLabel height =new JLabel(pokeDe.getHeightStr());
+       	JLabel weight =new JLabel(pokeDe.getWeightStr());
+       	JLabel xP =new JLabel(pokeDe.getbaseXPStr());
+       	JLabel ability =new JLabel(pokeDe.getAbilitiesStr());
+       	JLabel stat = new JLabel("Stats:");
+       	JLabel statT = new JLabel(pokeDe.getStatsStr());
+    	
+           JPanel panel11 = new JPanel(new GridLayout(3, 1));
+           pan.add(pan1);
+          // panel1.add(pic);
+       panel1.add(pic);
+           //ad to center panel
+           
+           panel1.add(name);
+          
+           panel11.add(height);
+         
+           panel11.add(weight);
+           panel11.add(xP);
+           panel1.add(panel11);
+			JPanel StatPanel = new JPanel(new GridLayout(pokeDe.getStatTot()+1+1, 2));
+			StatPanel.add(stat);
+			StatPanel.add(new JLabel());
+			StatPanel.add(new JLabel());
+			StatPanel.add(new JLabel("Name:"));
+			StatPanel.add(new JLabel("Base Stats:"));
+			StatPanel.add(new JLabel("Effort:"));
+			for(int i =0; i<pokeDe.getStatTot();i++) {
+				StatPanel.add(new JLabel(pokeDe.getStat(i).name));
+				StatPanel.add(new JLabel(pokeDe.getStat(i).baseStat));
+				StatPanel.add(new JLabel(pokeDe.getStat(i).effort));
+			}
+           panel1.add(StatPanel);
+           panel1.add(ability);
+           pan.add(panel1);
+           pan.add(pan2);
 
         frame.pack();
 
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setVisible(true); 
         frame.setSize(1000, 800);
 
         //Creating the MenuBar and adding components
         JMenuBar mb = new JMenuBar();
-        JMenu m1 = new JMenu("FILE");
-        JMenu m2 = new JMenu("Help");
-        mb.add(m1);
-        mb.add(m2);
-        JMenuItem m11 = new JMenuItem("Open");
-        JMenuItem m22 = new JMenuItem("Save as");
-        m1.add(m11);
-        m1.add(m22);
+
 
         //Creating the panel at bottom and adding components
         JPanel panel = new JPanel(); // the panel is not visible in output
-        JLabel label = new JLabel("Enter Text");
-       // JTextField tf = new JTextField(10); // accepts upto 10 characters
-        JButton previous = new JButton("Previous");
-        JButton next = new JButton("Next");
-        panel.add(label); // Components Added using Flow Layout
-       // panel.add(tf);
-        panel.add(previous);
-        panel.add(next);
 
-        // Text Area at the Center
-        JTextArea ta = new JTextArea();
+
+
 
         //Adding Components to the frame.
+        
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
-        frame.getContentPane().add(BorderLayout.CENTER, new JScrollPane(panel11));//new JScrollPane(table));
+        frame.getContentPane().add(BorderLayout.CENTER, new JScrollPane(pan));//new JScrollPane(table));
         frame.setVisible(true);
         
 
