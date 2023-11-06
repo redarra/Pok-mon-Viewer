@@ -82,14 +82,13 @@ public class ClientApp {
 	}
 
 	public void JsonToObjList(String jsonString) {
-		// String jsonString = jsonObject.toString();
-		//String ar = clean(jsonString,"results:");
-		System.out.println(jsonString);
+		
+		//System.out.println(jsonString);
 		String[] pokes = jsonString.split(",");
 		count=pokes.length/5;
-		System.out.println(count);
+		//System.out.println(count);
 		for (int i = 0; i < pokes.length/5; i++) {
-		//	System.out.println(pokes[i*5+1]);
+		
 			pokeList.add(new Pokemon(pokes[i * 5 + 1], pokes[i * 5 + 3] + ":" + pokes[i * 5 + 4]));
 
 		}
@@ -101,7 +100,7 @@ public class ClientApp {
 
 	public PokemonDetails JsonToObjPokeList(Pokemon poke, String jsonString) {
 		PokemonDetails pokeDet = new PokemonDetails( poke.name, poke.url);
-		System.out.println(jsonString);
+		//System.out.println(jsonString);
 		// ability
 
 		String[] list = jsonString.split("\"" + "ability" + "\"");

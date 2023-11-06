@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import Controller.Pokemon_Viewer.PokemonController;
 import Model.Pokemon_Viewer.Pokemon;
 import Model.Pokemon_Viewer.PokemonDetails;
-
+//this screen displays all the pokemon info
 public class DetailScreen {
 	PokemonController controller;
 	Pokemon poke;
@@ -38,13 +38,14 @@ public class DetailScreen {
 			pan.setLayout(new GridLayout(1, 3));
 			JPanel pan1 = new JPanel();
 			JPanel pan2 = new JPanel();
+			JPanel panel11 = new JPanel(new GridLayout(3, 1));
 
 			JFrame frame = new JFrame("Pokemon Details");
 			JPanel panel1 = new JPanel(new GridLayout(5, 1));
-
+//Image for the pokemon
 			URL url = new URL(pokeDe.imageUrl);
 			Image img = ImageIO.read(url);
-
+//Labels displaying all the info
 			JLabel pic = new JLabel(new ImageIcon(img));
 			JLabel name = new JLabel(pokeDe.name);
 			JLabel height = new JLabel(pokeDe.getHeightStr());
@@ -52,8 +53,8 @@ public class DetailScreen {
 			JLabel xP = new JLabel(pokeDe.getbaseXPStr());
 			JLabel ability = new JLabel(pokeDe.getAbilitiesStr());
 			JLabel stat = new JLabel("Stats:");
-			
-			JPanel panel11 = new JPanel(new GridLayout(3, 1));
+			// Grid for all the information
+
 			pan.add(pan1);
 			panel1.add(pic);
 			panel1.add(name);
@@ -61,6 +62,7 @@ public class DetailScreen {
 			panel11.add(weight);
 			panel11.add(xP);
 			panel1.add(panel11);
+			// Grid to display the stats table
 			JPanel StatPanel = new JPanel(new GridLayout(pokeDe.getStatTot() + 1 + 1, 2));
 			StatPanel.add(stat);
 			StatPanel.add(new JLabel());
@@ -68,11 +70,13 @@ public class DetailScreen {
 			StatPanel.add(new JLabel("Name:"));
 			StatPanel.add(new JLabel("Base Stats:"));
 			StatPanel.add(new JLabel("Effort:"));
+			// add the stats objects to the grid
 			for (int i = 0; i < pokeDe.getStatTot(); i++) {
 				StatPanel.add(new JLabel(pokeDe.getStat(i).name));
 				StatPanel.add(new JLabel(pokeDe.getStat(i).baseStat));
 				StatPanel.add(new JLabel(pokeDe.getStat(i).effort));
 			}
+			// Add it all together
 			panel1.add(StatPanel);
 			panel1.add(ability);
 			pan.add(panel1);
@@ -85,7 +89,7 @@ public class DetailScreen {
 
 			JMenuBar mb = new JMenuBar();
 
-			JPanel panel = new JPanel(); 
+			JPanel panel = new JPanel();
 
 			frame.getContentPane().add(BorderLayout.SOUTH, panel);
 			frame.getContentPane().add(BorderLayout.NORTH, mb);

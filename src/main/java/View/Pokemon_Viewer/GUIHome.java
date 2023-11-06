@@ -26,12 +26,12 @@ public class GUIHome {
 	public JFrame frame = new JFrame("Pokedex");
 	public int rows = 10;
 	public int cols = 4;
-	public int page1=1;
+	public int page1 = 1;
 	public int cellWidth = 15;
 	public JButton previous = new JButton("Previous");
 	public JButton next = new JButton("Next");
-	public JLabel page;
-	JPanel panel = new JPanel();
+	public JLabel page = new JLabel();
+	JPanel panel = new JPanel(new GridLayout(1, 3));
 	JMenuBar mb = new JMenuBar();
 	JComboBox<String> c1 = new JComboBox<>();
 	JLabel l = new JLabel();
@@ -51,19 +51,26 @@ public class GUIHome {
 		mb.add(new JLabel("Habitat Filter: "));
 		mb.add(c1);
 		mb.add(l);
-		panel = new JPanel();
-		panel.add(previous);
-		//page = new JLabel("Page :"+page1);
-		panel.add(new JLabel("Page :"+page1));
-		panel.add(next);
+
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.setSize(1000, 800);
+		if (page1 == 1) {
+			previous.setEnabled(false);
+
+		} else {
+			previous.setEnabled(true);
+		}
+
 		c1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox comboBox1 = (JComboBox) e.getSource();
 				Object selected = comboBox1.getSelectedItem();
-				
-				page1=1;
-				
+
+				page1 = 1;
+
 				if (selected == "All") {
 					try {
 						controller.loadList();
@@ -75,7 +82,10 @@ public class GUIHome {
 				} else {
 					try {
 						controller.find(selected);
+
 						compileFrame();
+
+						// compileFrame();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -84,28 +94,17 @@ public class GUIHome {
 						e1.printStackTrace();
 					}
 				}
-
 			}
 		});
-
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		frame.setSize(1000, 800);
-		if (page1 == 1) {
-			previous.setEnabled(false);
-			
-		} else {
-			previous.setEnabled(true);
-		}
 		next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.getNextPokeList(true);
-					page1=page1+1;
+					page1 = page1 + 1;
+
 					previous.setEnabled(true);
-					//page = new JLabel("Page"+page1);
+					// page = new JLabel("Page"+page1);
 					compileFrame();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -122,9 +121,11 @@ public class GUIHome {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.getNextPokeList(false);
-					if(page1>1) {
-					page1=page1-1;}
-					//page = new JLabel("Page"+page1);
+					if (page1 > 1) {
+						page1 = page1 - 1;
+
+					}
+					// page = new JLabel("Page"+page1);
 					compileFrame();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -135,14 +136,20 @@ public class GUIHome {
 				}
 			}
 		});
-		
+
 		compileFrame();
 	}
 
 	public void compileFrame() {
 
+		panel.add(previous);
+		page.setText("Page: " + page1);
+		panel.add(page);
+		panel.add(next);
+	
 		mainPanel = new PokemonGrid(rows, cols, cellWidth, controller);
-		JScrollPane n = new JScrollPane(mainPanel);
+
+//		JScrollPane n = new JScrollPane(mainPanel);
 		frame.getContentPane().add(BorderLayout.SOUTH, panel);
 		frame.getContentPane().add(BorderLayout.NORTH, mb);
 		frame.getContentPane().add(BorderLayout.CENTER, mainPanel);// new JScrollPane(table));

@@ -59,6 +59,7 @@ public class PokemonGrid extends JPanel {
 		}
 	}
 
+
 //The function for what happens once the mouse click happens
 	public void labelPressed(JLabel label) throws IOException, InterruptedException {
 		for (int row = 0; row < myLabels.length; row++) {

@@ -47,7 +47,7 @@ public class PokemonController implements ActionListener {
 		pokeList = clApp.getPokeList();
 		max = pokeList.size();
 	}
-
+//fetches the list of pokemon for the habitat specified
 	public void loadHabPokeList(String filter) throws IOException, InterruptedException {
 		pokeList = clApp.getPokeList();
 		totalPoke = clApp.fetch(filter);
@@ -58,7 +58,7 @@ public class PokemonController implements ActionListener {
 		max = pokeList.size();
 
 	}
-
+//finds which habitat matches the one selected.
 	public void find(Object t) throws IOException, InterruptedException {
 
 		for (int i = 0; i < pokemonHabitat.size(); i++) {
@@ -69,7 +69,7 @@ public class PokemonController implements ActionListener {
 		}
 
 	}
-
+//This method fetches the pokemon details and stores in in List in the first position and shifts all the others in the list.
 	public PokemonDetails getPokemon(Pokemon poke) throws IOException, InterruptedException {
 		for (int i = 0; i < pokeDeList.size(); i++) {
 			if (pokeDeList.get(i).name == poke.name) {
@@ -80,7 +80,7 @@ public class PokemonController implements ActionListener {
 					List<PokemonDetails> pokeDeList2 = new ArrayList<PokemonDetails>();
 					pokeDeList2.add(pokeDeList.get(pos));
 					for (int x = 0; x < pokeDeList.size(); x++) {
-						System.out.println(pokeDeList.get(x).name);
+						//System.out.println(pokeDeList.get(x).name);
 
 						if (pokeDeList2.get(0) != pokeDeList.get(x)) {
 							pokeDeList2.add(pokeDeList.get(x));
@@ -127,7 +127,9 @@ public class PokemonController implements ActionListener {
 		return pd;
 
 	}
-
+	
+//This is the same as getPokemon method except without Caching.
+	//Used this when getPokemon method was not working.
 	public PokemonDetails getPokemon2(Pokemon poke) throws IOException, InterruptedException {
 		PokemonDetails pd = clApp.getPokemon(poke);
 		return pd;
