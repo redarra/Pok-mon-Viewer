@@ -23,7 +23,7 @@ import java.net.URL;
 public class GUIHome {
 	public PokemonGrid mainPanel;
 	public PokemonController controller;
-	public JFrame frame = new JFrame("Pokedex");
+	JFrame frame = new JFrame("Pokedex");
 	public int rows = 10;
 	public int cols = 4;
 	public int page1 = 1;
@@ -36,7 +36,7 @@ public class GUIHome {
 	JComboBox<String> c1 = new JComboBox<>();
 	JLabel l = new JLabel();
 	String s1[];
-
+//	JPanel panel1 = new JPanel();
 	public GUIHome(PokemonController controller) {
 		this.controller = controller;
 		s1 = new String[controller.pokemonHabitat.size() + 1];
@@ -51,17 +51,14 @@ public class GUIHome {
 		mb.add(new JLabel("Habitat Filter: "));
 		mb.add(c1);
 		mb.add(l);
-
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		frame.setSize(1000, 800);
+		
 		if (page1 == 1) {
 			previous.setEnabled(false);
 
 		} else {
 			previous.setEnabled(true);
 		}
+		
 
 		c1.addActionListener(new ActionListener() {
 			@Override
@@ -74,7 +71,7 @@ public class GUIHome {
 				if (selected == "All") {
 					try {
 						controller.loadList();
-						compileFrame();
+						refreshFrame();
 					} catch (IOException | InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -82,9 +79,7 @@ public class GUIHome {
 				} else {
 					try {
 						controller.find(selected);
-
-						compileFrame();
-
+						refreshFrame();
 						// compileFrame();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
@@ -137,10 +132,17 @@ public class GUIHome {
 			}
 		});
 
-		compileFrame();
+		refreshFrame();
 	}
-
+public void refreshFrame() {		frame.dispose();
+frame=new JFrame("Podex");
+	frame.pack();
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setVisible(true);
+	frame.setSize(1000, 800);
+	compileFrame();}
 	public void compileFrame() {
+		
 
 		panel.add(previous);
 		page.setText("Page: " + page1);
@@ -148,12 +150,15 @@ public class GUIHome {
 		panel.add(next);
 	
 		mainPanel = new PokemonGrid(rows, cols, cellWidth, controller);
-
+		
+		JPanel p =mainPanel;
+	//	panel1.add(mainPanel);
 //		JScrollPane n = new JScrollPane(mainPanel);
 		frame.getContentPane().add(BorderLayout.SOUTH, panel);
 		frame.getContentPane().add(BorderLayout.NORTH, mb);
-		frame.getContentPane().add(BorderLayout.CENTER, mainPanel);// new JScrollPane(table));
-		frame.setVisible(true);
+		frame.getContentPane().add(BorderLayout.CENTER, p);// new JScrollPane(table));
+	//	frame.getContentPane().add(BorderLayout.CENTER, mb);// new JScrollPane(table));
+	frame.setVisible(true);
 	}
 
 }
