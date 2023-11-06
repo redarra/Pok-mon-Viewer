@@ -36,7 +36,7 @@ public class GUIHome {
 	JComboBox<String> c1 = new JComboBox<>();
 	JLabel l = new JLabel();
 	String s1[];
-//	JPanel panel1 = new JPanel();
+
 	public GUIHome(PokemonController controller) {
 		this.controller = controller;
 		s1 = new String[controller.pokemonHabitat.size() + 1];
@@ -51,14 +51,13 @@ public class GUIHome {
 		mb.add(new JLabel("Habitat Filter: "));
 		mb.add(c1);
 		mb.add(l);
-		
+
 		if (page1 == 1) {
 			previous.setEnabled(false);
 
 		} else {
 			previous.setEnabled(true);
 		}
-		
 
 		c1.addActionListener(new ActionListener() {
 			@Override
@@ -80,7 +79,6 @@ public class GUIHome {
 					try {
 						controller.find(selected);
 						refreshFrame();
-						// compileFrame();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -97,9 +95,8 @@ public class GUIHome {
 				try {
 					controller.getNextPokeList(true);
 					page1 = page1 + 1;
-
 					previous.setEnabled(true);
-					// page = new JLabel("Page"+page1);
+					
 					compileFrame();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -120,7 +117,7 @@ public class GUIHome {
 						page1 = page1 - 1;
 
 					}
-					// page = new JLabel("Page"+page1);
+					
 					compileFrame();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -134,31 +131,31 @@ public class GUIHome {
 
 		refreshFrame();
 	}
-public void refreshFrame() {		frame.dispose();
-frame=new JFrame("Podex");
-	frame.pack();
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setVisible(true);
-	frame.setSize(1000, 800);
-	compileFrame();}
+
+	public void refreshFrame() {
+		frame.dispose();
+		frame = new JFrame("Podex");
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.setSize(1000, 800);
+		compileFrame();
+	}
+
 	public void compileFrame() {
-		
 
 		panel.add(previous);
 		page.setText("Page: " + page1);
 		panel.add(page);
 		panel.add(next);
-	
+
 		mainPanel = new PokemonGrid(rows, cols, cellWidth, controller);
-		
-		JPanel p =mainPanel;
-	//	panel1.add(mainPanel);
-//		JScrollPane n = new JScrollPane(mainPanel);
+
+		JScrollPane n = new JScrollPane(mainPanel);
 		frame.getContentPane().add(BorderLayout.SOUTH, panel);
 		frame.getContentPane().add(BorderLayout.NORTH, mb);
-		frame.getContentPane().add(BorderLayout.CENTER, p);// new JScrollPane(table));
-	//	frame.getContentPane().add(BorderLayout.CENTER, mb);// new JScrollPane(table));
-	frame.setVisible(true);
+		frame.getContentPane().add(BorderLayout.CENTER, n);
+		frame.setVisible(true);
 	}
 
 }
