@@ -20,120 +20,92 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-
 public class GUIHome {
 	public PokemonGrid mainPanel;
 	public PokemonController controller;
 	public JFrame frame = new JFrame("Pokedex");
 	public int rows = 10;
 	public int cols = 4;
+	public int page1=1;
 	public int cellWidth = 15;
 	public JButton previous = new JButton("Previous");
 	public JButton next = new JButton("Next");
+	public JLabel page;
 	JPanel panel = new JPanel();
 	JMenuBar mb = new JMenuBar();
-	JMenu m1 = new JMenu("FILE");
-	JMenu m2 = new JMenu("Help");
-	JMenuItem m11 = new JMenuItem("Open");
-	JMenuItem m22 = new JMenuItem("Save as");
-	 JComboBox<String> c1= new JComboBox<>();
-	 JLabel l= new JLabel();
-	 String s1[] ;
-	// JPanel p = new JPanel();
+	JComboBox<String> c1 = new JComboBox<>();
+	JLabel l = new JLabel();
+	String s1[];
 
 	public GUIHome(PokemonController controller) {
 		this.controller = controller;
-		s1= new String[controller.pokemonHabitat.size()+1];
+		s1 = new String[controller.pokemonHabitat.size() + 1];
 	}
 
 	public void home() {
-
-		// Creating the Frame
-
-		// CustomModel model = new CustomModel(controller) {
-		// @Override
-		// public Class<?> getColumnClass(int column) {
-		// if (column==2) return ImageIcon.class;
-		// return Object.class;
-		// }
-		// };
-		// JTable table = new JTable();
-		// table.setModel(model);
-		
-		//mainPanel = new PokemonGrid(rows, cols, cellWidth, controller);
-		
-		s1[0]="All";
-		for(int i =1; i<controller.pokemonHabitat.size()+1;i++) {
-			s1[i]=controller.pokemonHabitat.get(i-1).name;
+		s1[0] = "All";
+		for (int i = 1; i < controller.pokemonHabitat.size() + 1; i++) {
+			s1[i] = controller.pokemonHabitat.get(i - 1).name;
 		}
-		 c1 = new JComboBox<>(s1);
-		 
-			mb.add(m1);
-			mb.add(m2);
-	mb.add(c1);
-	mb.add(l);
-			m1.add(m11);
-			m1.add(m22);
-	        // add ItemListener .addActionListener(event -> {
-			 c1.addActionListener(new ActionListener() {
-				 @Override
-		            public void actionPerformed(ActionEvent e) {
-				 JComboBox comboBox1 = (JComboBox) e.getSource();
+		c1 = new JComboBox<>(s1);
+		mb.add(new JLabel("Habitat Filter: "));
+		mb.add(c1);
+		mb.add(l);
+		panel = new JPanel();
+		panel.add(previous);
+		//page = new JLabel("Page :"+page1);
+		panel.add(new JLabel("Page :"+page1));
+		panel.add(next);
+		c1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox comboBox1 = (JComboBox) e.getSource();
+				Object selected = comboBox1.getSelectedItem();
+				
+				page1=1;
+				
+				if (selected == "All") {
+					try {
+						controller.loadList();
+						compileFrame();
+					} catch (IOException | InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else {
+					try {
+						controller.find(selected);
+						compileFrame();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 
-		            // Print the selected items and the action command.
-		            Object selected = comboBox1.getSelectedItem();
-		           
-		            if(selected=="All") {
-                		try {
-							controller.loadList();
-							compileFrame();
-			                  // mainPanel = new PokemonGrid(rows, cols, cellWidth, controller);
-			                  
-
-						} catch (IOException | InterruptedException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-                	}
-                	else {
-                		try {
-							controller.find(selected);
-							
-							compileFrame();
-							
-							
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (InterruptedException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-                	}
-					
-		            
-		            
-}
-			 });
-	        
-			 
+			}
+		});
 
 		frame.pack();
-
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setSize(1000, 800);
-
-		if (controller.index == 20) {
+		if (page1 == 1) {
 			previous.setEnabled(false);
+			
+		} else {
+			previous.setEnabled(true);
 		}
-		else {previous.setEnabled(true);}
 		next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				try {
 					controller.getNextPokeList(true);
+					page1=page1+1;
+					previous.setEnabled(true);
+					//page = new JLabel("Page"+page1);
 					compileFrame();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -150,13 +122,10 @@ public class GUIHome {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.getNextPokeList(false);
-
+					if(page1>1) {
+					page1=page1-1;}
+					//page = new JLabel("Page"+page1);
 					compileFrame();
-					// mainPanel = new PokemonGrid(rows, cols, cellWidth,controller);
-					// int rows = 10;
-					// int cols = 4;
-					// int cellWidth = 15;
-					// PokemonGrid mainPanel = new PokemonGrid(rows, cols, cellWidth,controller);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -164,31 +133,20 @@ public class GUIHome {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 			}
 		});
+		
 		compileFrame();
-		// panel.add(label); // Components Added using Flow Layout
-		// panel.add(tf);
-
-		// Text Area at the Center
-		// JTextArea ta = new JTextArea();
-
-		// Adding Components to the frame.
-
 	}
 
 	public void compileFrame() {
 
-		panel.add(previous);
-		panel.add(next);
 		mainPanel = new PokemonGrid(rows, cols, cellWidth, controller);
-		JScrollPane n= new JScrollPane(mainPanel);
+		JScrollPane n = new JScrollPane(mainPanel);
 		frame.getContentPane().add(BorderLayout.SOUTH, panel);
 		frame.getContentPane().add(BorderLayout.NORTH, mb);
 		frame.getContentPane().add(BorderLayout.CENTER, mainPanel);// new JScrollPane(table));
 		frame.setVisible(true);
 	}
-
 
 }

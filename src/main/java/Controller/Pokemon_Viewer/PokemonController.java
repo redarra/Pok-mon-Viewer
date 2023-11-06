@@ -16,86 +16,78 @@ public class PokemonController implements ActionListener {
 	public List<Pokemon> pokeList = new ArrayList<Pokemon>();
 	public List<PokemonDetails> pokeDeList = new ArrayList<PokemonDetails>();
 	public List<Filter> pokemonHabitat = new ArrayList<Filter>();
-
-	// public PokemonDetails[] pokeDeArr = new PokemonDetails[5] ;
 	public int total = 20;
 	public int index = 0;
 	public int max = 0;
 	public int totalPoke = 0;
-	public int rows=10;
-	
-	public int cols=4;
+	public int rows = 10;
+
+	public int cols = 4;
 
 	public PokemonController(ClientApp clApp) {
 		this.clApp = clApp;
-		// clApp.fetch(total);
 		pokeList = clApp.getPokeList();
 		try {
 			clApp.fetchPokemonHab();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		pokemonHabitat=clApp.getHabList();
+		pokemonHabitat = clApp.getHabList();
 	}
 
 	public void loadList() throws IOException, InterruptedException {
 		pokeList = clApp.getPokeList();
 		totalPoke = clApp.fetch(total);
-		max=0;
-		index=0;
-		total=20;
-		//rows=(total/cols);
-		// cols=4;
+		max = 0;
+		index = 0;
+		total = 20;
 		pokeList = clApp.getPokeList();
-
 		max = pokeList.size();
-		// index=1;
-
 	}
+
 	public void loadHabPokeList(String filter) throws IOException, InterruptedException {
 		pokeList = clApp.getPokeList();
 		totalPoke = clApp.fetch(filter);
 		pokeList = clApp.getPokeList();
-		max=totalPoke;
-		index=0;
-		total=20;
-		
-		
-		
+		max = totalPoke;
+		index = 0;
+		total = 20;
 		max = pokeList.size();
-		// index=1;
-		System.out.print("done");
 
 	}
-	public void find(Object t) throws IOException, InterruptedException {
-		
-		for(int i =0; i<pokemonHabitat.size();i++) {
-			System.out.println("loop "+i);
-			if(t.equals(pokemonHabitat.get(i).name)) {
-				loadHabPokeList(pokemonHabitat.get(i).url);
-				System.out.println("found");
-				break;
 
-				
-				
+	public void find(Object t) throws IOException, InterruptedException {
+
+		for (int i = 0; i < pokemonHabitat.size(); i++) {
+			if (t.equals(pokemonHabitat.get(i).name)) {
+				loadHabPokeList(pokemonHabitat.get(i).url);
+				break;
 			}
 		}
-		
+
 	}
+
 	public PokemonDetails getPokemon(Pokemon poke) throws IOException, InterruptedException {
 		for (int i = 0; i < pokeDeList.size(); i++) {
 			if (pokeDeList.get(i).name == poke.name) {
+
 				int pos = i;
 				PokemonDetails pd = pokeDeList.get(pos);
-				for (int x = 1; i < pokeDeList.size(); x++) {
+				if (pokeDeList.size() > 1 && pos != 0) {
+					List<PokemonDetails> pokeDeList2 = new ArrayList<PokemonDetails>();
+					pokeDeList2.add(pokeDeList.get(pos));
+					for (int x = 0; x < pokeDeList.size(); x++) {
+						System.out.println(pokeDeList.get(x).name);
 
-					pokeDeList.set(pokeDeList.size() - x, pokeDeList.get(pokeDeList.size() - 1 - x));
+						if (pokeDeList2.get(0) != pokeDeList.get(x)) {
+							pokeDeList2.add(pokeDeList.get(x));
+						}
+					}
+					pokeDeList = pokeDeList2;
 				}
-				pokeDeList.set(0, pd);
 				return pd;
 			}
 		}
@@ -111,7 +103,7 @@ public class PokemonController implements ActionListener {
 				}
 				pokeDeList.set(0, pd);
 			}
-		} // pokeDeList.indexOf(pd)
+		} //
 		else if (!pokeDeList.contains(pd)) {
 			for (int i = 1; i < pokeDeList.size(); i++) {
 
@@ -137,21 +129,18 @@ public class PokemonController implements ActionListener {
 	}
 
 	public PokemonDetails getPokemon2(Pokemon poke) throws IOException, InterruptedException {
-
 		PokemonDetails pd = clApp.getPokemon(poke);
 		return pd;
-
 	}
 
 	public void getNextPokeList(boolean shift) throws IOException, InterruptedException {
-		System.out.println(max);
 		if (shift) {
 			if (index + (totalPoke % 20) != max - 1) {
 				if (index < max - total) // stops when diff is exactly 20
 				{
 					index = index + total;
 				}
-				// else if(index==max-12) {}
+
 				else {
 					if (max + totalPoke % 20 >= totalPoke)// checks if diff to end is greater then 20
 					{
@@ -173,8 +162,6 @@ public class PokemonController implements ActionListener {
 			index = index - total;
 
 		}
-
-		// return pokeList;
 	}
 
 	public List<Pokemon> getPokeList() {

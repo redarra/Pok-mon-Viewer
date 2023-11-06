@@ -5,7 +5,7 @@ public class Pokemon {
 	public String name;
 	public String url;
 	public String imageUrl;
-
+//Pokemon Object Class
 	public Pokemon(String name, String url) {
 		String[] te = url.split("/");
 		String t=te[te.length-1];

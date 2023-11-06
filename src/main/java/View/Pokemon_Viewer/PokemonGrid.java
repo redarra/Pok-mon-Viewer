@@ -15,14 +15,13 @@ import Controller.Pokemon_Viewer.PokemonController;
 
 @SuppressWarnings("serial")
 public class PokemonGrid extends JPanel {
-	// private MyColor[][] myColors;
+
 	private JLabel[][] myLabels;
 	private PokemonController controller;
-	
 
+//creation of JPanel object and populates it
 	public PokemonGrid(int rows, int cols, int cellWidth, PokemonController controller1) {
 		controller = controller1;
-		// myColors = new MyColor[rows][cols];
 		myLabels = new JLabel[rows][cols];
 
 		MyMouseListener myListener = new MyMouseListener(this);
@@ -30,28 +29,28 @@ public class PokemonGrid extends JPanel {
 		setLayout(new GridLayout(rows, cols));
 
 		for (int row = 0; row < myLabels.length; row++) {
-			
+
 			for (int col = 0; col < myLabels[row].length; col++) {
-		
+
 				JLabel myLabel = new JLabel();
 				if ((row + 1) % 2 == 0) {
-					if(controller.pokeList.size()>((row - 1) / 2 * 4 + col + controller.getIndex())){
-					try {
-						URL url = new URL(
-								controller.getPokeList().get((row - 1) / 2 * 4 + col + controller.getIndex()).imageUrl);
-						Image img = ImageIO.read(url);
-						myLabel = new JLabel(new ImageIcon(img));
-					} catch (IOException e) {
-					}}
+					if (controller.pokeList.size() > ((row - 1) / 2 * 4 + col + controller.getIndex())) {
+						try {
+							URL url = new URL(controller.getPokeList()
+									.get((row - 1) / 2 * 4 + col + controller.getIndex()).imageUrl);
+							Image img = ImageIO.read(url);
+							myLabel = new JLabel(new ImageIcon(img));
+						} catch (IOException e) {
+						}
+					}
 				} else {
-					if(controller.pokeList.size()>(row / 2 * 4 + col + controller.getIndex())){
-					myLabel = new JLabel(controller.getPokeList().get(row / 2 * 4 + col + controller.getIndex()).name);}
+					if (controller.pokeList.size() > (row / 2 * 4 + col + controller.getIndex())) {
+						myLabel = new JLabel(
+								controller.getPokeList().get(row / 2 * 4 + col + controller.getIndex()).name);
+					}
 				}
 
 				myLabel.setOpaque(true);
-				// MyColor myColor = MyColor.GREEN;
-				// myColors[row][col] = myColor;
-				// myLabel.setBackground(myColor.getColor());
 				myLabel.addMouseListener(myListener);
 				myLabel.setPreferredSize(labelPrefSize);
 				add(myLabel);
@@ -59,50 +58,8 @@ public class PokemonGrid extends JPanel {
 			}
 		}
 	}
-	public void gridRefresh(int rows, int cols, int cellWidth, PokemonController controller1)
-	{
-		controller = controller1;
-		// myColors = new MyColor[rows][cols];
-		myLabels = new JLabel[rows][cols];
 
-		MyMouseListener myListener = new MyMouseListener(this);
-		Dimension labelPrefSize = new Dimension(cellWidth, cellWidth);
-		setLayout(new GridLayout(rows, cols));
-
-		for (int row = 0; row < myLabels.length; row++) {
-			
-			for (int col = 0; col < myLabels[row].length; col++) {
-		
-				JLabel myLabel = new JLabel();
-				if ((row + 1) % 2 == 0) {
-					if(controller.pokeList.size()>((row - 1) / 2 * 4 + col + controller.getIndex())){
-					try {
-						URL url = new URL(
-								controller.getPokeList().get((row - 1) / 2 * 4 + col + controller.getIndex()).imageUrl);
-						Image img = ImageIO.read(url);
-						myLabel = new JLabel(new ImageIcon(img));
-					} catch (IOException e) {
-					}}
-				} else {
-					if(controller.pokeList.size()>(row / 2 * 4 + col + controller.getIndex())){
-					myLabel = new JLabel(controller.getPokeList().get(row / 2 * 4 + col + controller.getIndex()).name);}
-				}
-
-				myLabel.setOpaque(true);
-				// MyColor myColor = MyColor.GREEN;
-				// myColors[row][col] = myColor;
-				// myLabel.setBackground(myColor.getColor());
-				myLabel.addMouseListener(myListener);
-				myLabel.setPreferredSize(labelPrefSize);
-				add(myLabel);
-				myLabels[row][col] = myLabel;
-			}
-		}
-	}	
-
-	// public MyColor[][] getMyColors() {
-	// return myColors;
-	// }
+//The function for what happens once the mouse click happens
 	public void labelPressed(JLabel label) throws IOException, InterruptedException {
 		for (int row = 0; row < myLabels.length; row++) {
 			for (int col = 0; col < myLabels[row].length; col++) {
@@ -113,9 +70,10 @@ public class PokemonGrid extends JPanel {
 					} else {
 						pos = row / 2 * 4 + col + controller.getIndex();
 					}
-if(pos<controller.pokeList.size()) {
-					DetailScreen details = new DetailScreen(controller, controller.getPokeList().get(pos));
-					details.detail();}
+					if (pos < controller.pokeList.size()) {
+						DetailScreen details = new DetailScreen(controller, controller.getPokeList().get(pos));
+						details.detail();
+					}
 
 				}
 			}
